@@ -1,62 +1,68 @@
 # TwiUSD Dataset
 
-**TwiUSD** (Twitter User Stance Detection) is a user-level stance detection dataset collected from Twitter, covering two major US political targets: **Joe Biden** and **Donald Trump**.
+**TwiUSD** (Twitter User Stance Detection) is a user-level stance detection dataset collected from Twitter, targeting two major US political figures: **Joe Biden** and **Donald Trump**.
 
-## Dataset Overview
+## Dataset Statistics
 
-| Target | Split | Samples |
-|--------|-------|---------|
-| Biden  | Train | 6,448   |
-| Biden  | Valid | 1,741   |
-| Biden  | Test  | 1,773   |
-| Trump  | Train | 8,120   |
-| Trump  | Valid | 2,154   |
-| Trump  | Test  | 2,105   |
-| **Total** | — | **22,341** |
+| Target | Train | Valid | Test | Total |
+|--------|-------|-------|------|-------|
+| Biden  | 5,448 | 1,837 | 1,884 | 9,169 |
+| Trump  | 5,315 | 2,268 | 2,215 | 9,798 |
+| **Total** | **10,763** | **4,105** | **4,099** | **18,967** |
+
+## Directory Structure
+
+```
+TwiUSD/
+├── biden/
+│   ├── train.csv
+│   ├── valid.csv
+│   └── test.csv
+└── trump/
+    ├── train.csv
+    ├── valid.csv
+    └── test.csv
+```
 
 ## Data Format
 
 Each CSV file contains the following columns:
 
-| Column | Description |
-|--------|-------------|
-| `id` | Twitter user ID |
-| `name` | Twitter display name |
-| `description` | User profile bio |
-| `tweets` | List of the user's tweets (stringified Python list) |
-| `follow` | List of user IDs this user follows |
-| `stance` | Stance label: `favor`, `against`, or `neutral` |
-| `remark` | Additional annotation remark (e.g., `none`) |
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | int | Twitter user ID |
+| `name` | str | Twitter display name |
+| `description` | str | User profile bio |
+| `tweets` | list | User's recent tweets (stringified Python list) |
+| `follow` | list | IDs of accounts this user follows |
+| `stance` | str | Stance label: `favor`, `against`, or `neutral` |
+| `remark` | str | Annotation remark (e.g., `none`) |
+| `followed_tweet` | str | Tweets from followed accounts (social context signal) |
 
-### Example Row (Biden / train.csv)
+### Example
 
-
-
-## Directory Structure
-
-
+```
+id,name,description,tweets,follow,stance,remark,followed_tweet
+2973525349,Steve Sanchez,"Provide insight...","['RT @Jim_Jordan: ...']","['2302407500']",favor,none,...
+```
 
 ## Stance Labels
 
-- **favor**: The user's tweets and profile indicate support for the target.
-- **against**: The user's tweets and profile indicate opposition to the target.
-- **neutral**: The user's stance toward the target is neutral or unclear.
+| Label | Description |
+|-------|-------------|
+| `favor` | User's content indicates support for the target |
+| `against` | User's content indicates opposition to the target |
+| `neutral` | User's stance is neutral or ambiguous |
 
 ## Task Description
 
-TwiUSD supports the **user-level stance detection** task: given a user's profile description, tweet history, and social network features, predict their stance toward a political target (Biden or Trump).
+TwiUSD supports **user-level stance detection**: given a user's profile, tweet history, and social network context, predict their stance toward a political target.
 
-This differs from post-level stance detection in that:
-1. **Multiple tweets per user** — the model must aggregate evidence across a user's tweet history.
-2. **User profile signals** — the bio description provides additional context.
-3. **Social graph signals** — the follower list captures indirect stance signals.
-
-## Citation
-
-If you use this dataset in your research, please cite the original paper:
-
-
+Key characteristics:
+- **User-level** (not post-level): stance is inferred from an aggregation of a user's activity
+- **Social context**: `followed_tweet` provides indirect stance signals from the user's social network
+- **Two targets**: Biden and Trump, enabling cross-target transfer experiments
 
 ## License
 
-Please use this dataset for academic research purposes only.
+For academic research use only.
